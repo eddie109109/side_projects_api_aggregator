@@ -127,7 +127,7 @@ class GamesController extends Controller
      */
     public function show($slug)
     {
-        $game =  Http::withHeaders([
+        $unformattedGame =  Http::withHeaders([
             'Client-ID' => env('IGDB_CLIENT_ID'),
             'Authorization' => env('IGDB_AUTHORIZATION')
         ])->withBody(
@@ -137,12 +137,63 @@ class GamesController extends Controller
         )->post('https://api.igdb.com/v4/games')
         ->json();
 
-        dump($game);
+       
 
-        abort_if(!$game, 404); // output 404 to the page when the game slug is wrong
+        abort_if(!$unformattedGame, 404); // output 404 to the page when the game slug is wrong
+
+
+        $game = $this->formatGame($unformattedGame[0]);
+
+        // dump($game);
         return view('show',[
-            'game' => $game[0],
+            'game' => $game,
         ]);
+    }
+
+    public function formatGame($game) {
+        
+
+        return collect($game)->merge([
+            'coverUrlBig' => str_replace('thumb', 'cover_big',$game['cover']['url']),
+            'formatted_first_release_date' => isset($game['first_release_date'])? date("F j, Y",$game['first_release_date']): "",
+            'formatted_rating' => isset($game['rating']) ?  floor($game['rating'])."%" : "0%",
+            'formatted_aggregated_rating' => isset($game['aggregated_rating']) ?  floor($game['aggregated_rating'])."%" : "0%",
+            'formatted_summary' => isset($game['summary']) ? $game['summary']: "",
+            'formatted_genres' => isset($game['genres']) ? collect($game['genres'])->pluck('name')->implode(", ") : "No Genre Info",
+            'formatted_involved_companies' => isset($game['involved_companies']) ? collect($game['involved_companies'])->pluck('company')->pluck('name')->implode(", ") : "No Company Info",
+            'formatted_platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->implode(', ') : "No Platform Info",
+            'formatted_screenshots' => isset($game['screenshots']) ? collect($game['screenshots'])->map(function($item){
+                $newItem = $item['url'];
+                return collect($item)->merge([
+                    'huge'=> str_replace('thumb', 'screenshot_huge',$newItem),
+                    'big'=>str_replace('thumb', 'screenshot_big',$newItem),
+                ])->toArray();
+            }):[],
+            'formatted_similar_games' => isset($game['similar_games']) ? collect($game['similar_games'])->map(function($item){
+                return collect($item)->merge([
+                    'routeToSlug' => route('games.show', $item['slug']),
+                    'coverBig' => isset($item['cover'])? str_replace('thumb', 'cover_big',$item['cover']['url']):"",
+                    'formatted_aggregated_rating' => isset($item['aggregated_rating'])? strval(floor($item['aggregated_rating']))."%": (isset($item['rating'])?strval(floor($item['rating']))."%": "0%"),
+                    'formatted_plateforms' => isset($item['platforms'])? collect($item['platforms'])->pluck('abbreviation')->implode(', '): "No Platform Info",
+                ])->toArray();
+            }):[],
+        ])->toArray();
+
+    //     @if (isset($item['cover']))
+    //     <img src={{str_replace('thumb', 'cover_big',$item['cover']['url'])}} alt="gamecovers" class="hover:opacity-75 transition ease-in-out duration-150">
+    // @endif 
+
+        // @if (isset($game['screenshots'] ))
+        //         @foreach ($game['screenshots'] as $item)
+        //             <div class="w-full h-full">
+        //                 <a href={{str_replace('thumb', 'screenshot_huge',$item['url'])}}>
+        //                     <img class="hover:opacity-75 transition ease-in-out duration-150" src={{str_replace('thumb', 'screenshot_big',$item['url'])}} alt="battlefield">
+        //                 </a>
+        //             </div>
+        //         @endforeach
+        //     @else
+        //         <div>Screenshots N/A :(</div>
+        //     @endif
     }
 
     /**
