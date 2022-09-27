@@ -49,8 +49,8 @@ class RecentlyReviewed extends Component
             return collect($game)->merge([
                 'coverUrl' => isset($game['cover'])? str_replace('thumb', 'cover_big',$game['cover']['url']):"",
                 'routeToSlug' => isset($game['slug'])? route('games.show', $game['slug']): "",
-                'floorAggregatedRating' => strval(floor($game['aggregated_rating']))."%",
-                'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', ')
+                'floorAggregatedRating' => isset($game['aggregated_rating'])? strval(floor($game['aggregated_rating']))."%": "0%",
+                'platforms' => isset($game['platforms'])? collect($game['platforms'])->pluck('abbreviation')->implode(', '):[]
             ]);
         })->toArray();
         
