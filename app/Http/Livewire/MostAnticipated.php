@@ -48,8 +48,8 @@ class MostAnticipated extends Component
 
             return collect($game)->merge([
                 'routeToSlug' => isset($game['slug']) ? route('games.show', $game['slug']): "",
-                'coverUrl' => str_replace('thumb', 'cover_small',$game['cover']['url']),
-                'first_release_date_formatted' => date("F j, Y",$game['first_release_date'])
+                'coverUrl' => isset($game['cover']) ? str_replace('thumb', 'cover_small',$game['cover']['url']): "",
+                'first_release_date_formatted' => isset($game['first_release_date']) ? date("F j, Y",$game['first_release_date']) : "",
             ]);
         })->toArray();
     }
