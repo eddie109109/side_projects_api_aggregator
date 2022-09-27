@@ -47,8 +47,8 @@ class RecentlyReviewed extends Component
         $recentlyReviewedWithNewKeys = collect($games);
         return $recentlyReviewedWithNewKeys->map(function($game) {
             return collect($game)->merge([
-                'coverUrl' => str_replace('thumb', 'cover_big',$game['cover']['url']),
-                'routeToSlug' => route('games.show', $game['slug']),
+                'coverUrl' => isset($game['cover'])? str_replace('thumb', 'cover_big',$game['cover']['url']):"",
+                'routeToSlug' => isset($game['slug'])? route('games.show', $game['slug']): "",
                 'floorAggregatedRating' => strval(floor($game['aggregated_rating']))."%",
                 'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', ')
             ]);
