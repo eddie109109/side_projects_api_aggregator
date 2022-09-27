@@ -10,7 +10,14 @@
                 </div>
             </div>
             <div class="ml-12">
-                <a href={{$game['routeToSlug']}} class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">{{$game['name']}}</a>
+                <a href={{$game['routeToSlug']}} class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">
+                    @if (isset($game['name']))
+                    {{$game['name']}}
+                    @else
+                        N/A
+                    @endif
+                    
+                </a>
                 <div class="text-gray-400 mt-1">
                     {{-- @foreach ($game['platforms'] as $platform)
                         @if (array_key_exists('abbreviation', $platform))
