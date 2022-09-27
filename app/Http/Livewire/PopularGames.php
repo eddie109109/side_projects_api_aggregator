@@ -20,12 +20,12 @@ class PopularGames extends Component
 
         $after = Carbon::now()->addMonths(2)->timestamp;
 
-        $this->popularGames = Cache::remember('popular-games', 100, function() use($before, $after){
+        $unformatedGames = Cache::remember('popular-games', 100, function() use($before, $after){
             return Http::withHeaders([
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => env('IGDB_AUTHORIZATION')
             ])->withBody(
-                "fields *, cover.url, first_release_date, platforms.abbreviation, aggregated_rating;
+                "fields name, cover.url, first_release_date, platforms.abbreviation, aggregated_rating, rating, slug;
                  where cover != null & platforms = (48, 49, 130, 6) & aggregated_rating != null & platforms.abbreviation != null
                  & (first_release_date >= {$before} & first_release_date <= {$after});
                  sort aggregated_rating desc;
@@ -36,6 +36,9 @@ class PopularGames extends Component
         });
 
         
+        $this->popularGames = $this->formatGames($unformatedGames);
+
+        // dd($this->popularGames);
     }
 
     public function render()
@@ -43,4 +46,18 @@ class PopularGames extends Component
 
         return view('livewire.popular-games');
     }
+
+    public function formatGames($games) {
+        $gamesWithNewKeys = collect($games);
+        return $gamesWithNewKeys->map(function($game) {
+            return collect($game)->merge([
+                'coverUrl' => str_replace('thumb', 'cover_big',$game['cover']['url']),
+                'routeToSlug' => route('games.show', $game['slug']),
+                'floorAggregatedRating' => strval(floor($game['aggregated_rating']))."%",
+                'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', ')
+            ]);
+        })->toArray();
+        
+    }
+
 }

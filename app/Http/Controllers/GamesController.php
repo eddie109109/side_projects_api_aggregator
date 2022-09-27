@@ -127,7 +127,22 @@ class GamesController extends Controller
      */
     public function show($slug)
     {
-        return view('show');
+        $game =  Http::withHeaders([
+            'Client-ID' => env('IGDB_CLIENT_ID'),
+            'Authorization' => env('IGDB_AUTHORIZATION')
+        ])->withBody(
+            "fields *, cover.url, rating, aggregated_rating, genres.name, involved_companies.company.*, 
+            similar_games.*, similar_games.slug, similar_games.name, similar_games.cover.url, similar_games.platforms.abbreviation, summary, platforms.abbreviation, videos.*, screenshots.*; where slug=\"{$slug}\";",
+            'text/plain'
+        )->post('https://api.igdb.com/v4/games')
+        ->json();
+
+        dump($game);
+
+        abort_if(!$game, 404); // output 404 to the page when the game slug is wrong
+        return view('show',[
+            'game' => $game[0],
+        ]);
     }
 
     /**

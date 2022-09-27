@@ -3,21 +3,17 @@
     @forelse ($popularGames as $game)
       <div class="game mt-8">
           <div class="relative inline-block">
-              <a href="#">
-                  <img src={{str_replace('thumb', 'cover_big',$game['cover']['url'])}} alt="battlefield" class="hover:opacity-75 transition ease-in-out duration-150">
+              <a href={{$game['routeToSlug']}}>
+                  <img src={{$game['coverUrl']}} alt="battlefield" class="hover:opacity-75 transition ease-in-out duration-150">
               </a>
               <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full" style="right:-20px; bottom: -20px">
                   <!-- the circle rating goes in here  -->
-                  <div class="font-semibold flex text-xs justify-center items-center h-full">{{floor($game['aggregated_rating'])}}%</div>
+                  <div class="font-semibold flex text-xs justify-center items-center h-full">{{$game['floorAggregatedRating']}}</div>
               </div>
           </div>
-          <a href="#" class="block text-base font-semibold leading-tight hover:text-gray-400 mt-8">{{$game['name']}}</a>
+          <a href={{$game['routeToSlug']}} class="block text-base font-semibold leading-tight hover:text-gray-400 mt-8">{{$game['name']}}</a>
           <div class="text-gray-400 mt-1">
-              @foreach ($game['platforms'] as $platform)
-                  @if (array_key_exists('abbreviation', $platform))
-                      {{$platform['abbreviation']}},
-                  @endif
-              @endforeach
+              {{$game['platforms']}}
           </div>
       </div>
     @empty
@@ -30,16 +26,12 @@
         @for ($i = 0; $i < 12; $i ++)
             <div class="game mt-8">
                 <div class="relative inline-block">
-                        {{-- <div class="font-semibold flex text-xs justify-center items-center h-full"></div> --}}
                     <div class="w-52 h-60 bg-gray-800"></div>
                     <div class="w-48 h-5 bg-gray-100 rounded mt-12"></div>
                     <div class="w-32 h-5 bg-gray-400 rounded mt-4 inline-block"></div>
                 </div>
             </div>
         @endfor
-            
-        
-        
     @endforelse
 
       

@@ -2,21 +2,22 @@
     @forelse ($recentlyReviewed as $game)
         <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
             <div class="relative flex-none">
-                <a href="#">
-                    <img src={{str_replace('thumb', 'cover_big',$game['cover']['url'])}} alt="battlefield" class="w-48 hover:opacity-75 transition ease-in-out duration-150">
+                <a href={{$game['routeToSlug']}}>
+                    <img src={{$game['coverUrl']}} alt="battlefield" class="w-48 hover:opacity-75 transition ease-in-out duration-150">
                 </a>
                 <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full" style="right:-20px; bottom: -20px">
-                    <div class="font-semibold flex text-xs justify-center items-center h-full">{{floor($game['aggregated_rating'])}}%</div>
+                    <div class="font-semibold flex text-xs justify-center items-center h-full">{{$game['floorAggregatedRating']}}</div>
                 </div>
             </div>
             <div class="ml-12">
-                <a href="#" class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">{{$game['name']}}</a>
+                <a href={{$game['routeToSlug']}} class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">{{$game['name']}}</a>
                 <div class="text-gray-400 mt-1">
-                    @foreach ($game['platforms'] as $platform)
+                    {{-- @foreach ($game['platforms'] as $platform)
                         @if (array_key_exists('abbreviation', $platform))
                             {{$platform['abbreviation']}},
                         @endif
-                    @endforeach
+                    @endforeach --}}
+                    {{$game['platforms']}}
                 </div>
                 <p class="mt-6 text-gray-400 hidden lg:block">
                     {{$game['summary']}}
@@ -36,7 +37,7 @@
                 <div class="w-48 h-56 bg-gray-600 rounded"></div>
             </div>
             <div class="ml-12">
-                <div class="text-lg bg-gray-400 font-semibold leading-tight w-48 h-8 block rounded"></div>
+                <div class="text-lg bg-gray-100 font-semibold leading-tight w-48 h-8 block rounded"></div>
                 <div class="text-gray-400 mt-5">
                     <span class="bg-gray-700 rounded h-6 inline-block text-transparent mt-5">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente, iusto.</span>
                     <span class="bg-gray-700 rounded h-6 inline-block text-transparent mt-5">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente, iusto.</span>

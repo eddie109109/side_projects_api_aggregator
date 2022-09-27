@@ -755,6 +755,9 @@ video {
 .w-52 {
   width: 13rem;
 }
+.w-60 {
+  width: 15rem;
+}
 .min-w-full {
   min-width: 100%;
 }
@@ -803,6 +806,9 @@ video {
 }
 .gap-12 {
   gap: 3rem;
+}
+.gap-8 {
+  gap: 2rem;
 }
 .space-y-12 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
@@ -995,6 +1001,10 @@ video {
 }
 .text-transparent {
   color: transparent;
+}
+.text-gray-300 {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity));
 }
 .underline {
   text-decoration-line: underline;

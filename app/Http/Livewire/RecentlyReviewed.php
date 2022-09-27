@@ -19,7 +19,7 @@ class RecentlyReviewed extends Component
 
         $current = Carbon::now()->timestamp;
 
-        $this->recentlyReviewed = Cache::remember('recently-reviewed', 100, function() use($current, $before){
+        $unformattedRecentlyReviewed = Cache::remember('recently-reviewed', 100, function() use($current, $before){
             return Http::withHeaders([
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => env('IGDB_AUTHORIZATION')
@@ -34,10 +34,25 @@ class RecentlyReviewed extends Component
             )->post('https://api.igdb.com/v4/games')
             ->json();
         });
+
+        $this->recentlyReviewed = $this->formatRecentlyReviewed($unformattedRecentlyReviewed);
     }
 
     public function render()
     {
         return view('livewire.recently-reviewed');
+    }
+
+    public function formatRecentlyReviewed($games) {
+        $recentlyReviewedWithNewKeys = collect($games);
+        return $recentlyReviewedWithNewKeys->map(function($game) {
+            return collect($game)->merge([
+                'coverUrl' => str_replace('thumb', 'cover_big',$game['cover']['url']),
+                'routeToSlug' => route('games.show', $game['slug']),
+                'floorAggregatedRating' => strval(floor($game['aggregated_rating']))."%",
+                'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', ')
+            ]);
+        })->toArray();
+        
     }
 }

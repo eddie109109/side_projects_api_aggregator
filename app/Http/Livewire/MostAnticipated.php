@@ -19,7 +19,7 @@ class MostAnticipated extends Component
         $after_four_months = Carbon::now()->addMonths(4)->timestamp;
 
         $current = Carbon::now()->timestamp;
-        $this->mostAnticipated = Cache::remember('most-anticipated', 100, function() use($current, $after_four_months){
+        $unformattedMostAnticipated = Cache::remember('most-anticipated', 100, function() use($current, $after_four_months){
         return Http::withHeaders([
             'Client-ID' => env('IGDB_CLIENT_ID'),
             'Authorization' => env('IGDB_AUTHORIZATION')
@@ -32,10 +32,24 @@ class MostAnticipated extends Component
         )->post('https://api.igdb.com/v4/games')
         ->json();
         });
+
+        $this->mostAnticipated = $this->formatMostAnticipated($unformattedMostAnticipated);
     }
 
     public function render()
     {
         return view('livewire.most-anticipated');
+    }
+
+    public function formatMostAnticipated($mostAnticipated){
+        $mostAnticipatedWithNewKeys = collect($mostAnticipated);
+
+        return $mostAnticipatedWithNewKeys->map(function($game){
+            return collect($game)->merge([
+                'routeToSlug' => route('games.show', $game['slug']),
+                'coverUrl' => str_replace('thumb', 'cover_small',$game['cover']['url']),
+                'first_release_date_formatted' => date("F j, Y",$game['first_release_date'])
+            ]);
+        })->toArray();
     }
 }

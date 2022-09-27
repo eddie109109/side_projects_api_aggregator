@@ -20,7 +20,7 @@ class ComingSoon extends Component
         $after = Carbon::now()->addMonths(2)->timestamp;
         $current = Carbon::now()->timestamp;
 
-        $this->comingSoon = Cache::remember('coming-soon', 100, function() use($current, $after){
+        $unformattedComingSoon = Cache::remember('coming-soon', 100, function() use($current, $after){
             return  Http::withHeaders([
             'Client-ID' => env('IGDB_CLIENT_ID'),
             'Authorization' => env('IGDB_AUTHORIZATION')
@@ -34,10 +34,26 @@ class ComingSoon extends Component
         ->json();
 
         });
+
+        $this->comingSoon = $this->formatComingSoon($unformattedComingSoon);
+
+        // dd($this->comingSoon);
     }
 
     public function render()
     {
         return view('livewire.coming-soon');
+    }
+
+    public function formatComingSoon($comingSoon){
+        $comingSoonWithNewKeys = collect($comingSoon);
+
+        return $comingSoonWithNewKeys->map(function($game){
+            return collect($game)->merge([
+                'routeToSlug' => route('games.show', $game['slug']),
+                'coverUrl' => str_replace('thumb', 'cover_small',$game['cover']['url']),
+                'first_release_date_formatted' => date("F j, Y",$game['first_release_date'])
+            ]);
+        })->toArray();
     }
 }
