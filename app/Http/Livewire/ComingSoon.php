@@ -50,9 +50,9 @@ class ComingSoon extends Component
 
         return $comingSoonWithNewKeys->map(function($game){
             return collect($game)->merge([
-                'routeToSlug' => route('games.show', $game['slug']),
-                'coverUrl' => str_replace('thumb', 'cover_small',$game['cover']['url']),
-                'first_release_date_formatted' => date("F j, Y",$game['first_release_date'])
+                'routeToSlug' => isset($game['slug']) ? route('games.show', $game['slug']): "",
+                'coverUrl' => isset($game['cover']) ? str_replace('thumb', 'cover_small',$game['cover']['url']): "",
+                'first_release_date_formatted' => isset($game['first_release_date']) ? date("F j, Y",$game['first_release_date']) : "",
             ]);
         })->toArray();
     }
