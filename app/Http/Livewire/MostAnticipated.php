@@ -24,7 +24,7 @@ class MostAnticipated extends Component
             'Client-ID' => env('IGDB_CLIENT_ID'),
             'Authorization' => env('IGDB_AUTHORIZATION')
         ])->withBody(
-            "fields *, cover.url, first_release_date, cover, name, rating, slug;
+            "fields *, cover.url, first_release_date, cover, name, rating;
              where cover != null & (first_release_date >= {$current} & first_release_date <= {$after_four_months});
              sort rating desc;
             limit 4;",
@@ -45,8 +45,9 @@ class MostAnticipated extends Component
         $mostAnticipatedWithNewKeys = collect($mostAnticipated);
 
         return $mostAnticipatedWithNewKeys->map(function($game){
+
             return collect($game)->merge([
-                'routeToSlug' => route('games.show', $game['slug']),
+                'routeToSlug' => isset($game['slug']) ? route('games.show', $game['slug']): "",
                 'coverUrl' => str_replace('thumb', 'cover_small',$game['cover']['url']),
                 'first_release_date_formatted' => date("F j, Y",$game['first_release_date'])
             ]);
