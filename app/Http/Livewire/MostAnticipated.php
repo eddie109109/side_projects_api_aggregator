@@ -24,7 +24,7 @@ class MostAnticipated extends Component
             'Client-ID' => env('IGDB_CLIENT_ID'),
             'Authorization' => env('IGDB_AUTHORIZATION')
         ])->withBody(
-            "fields *, cover.url, first_release_date, cover, name, rating;
+            "fields *, cover.url, first_release_date, cover, name, rating, slug;
              where cover != null & (first_release_date >= {$current} & first_release_date <= {$after_four_months});
              sort rating desc;
             limit 4;",
