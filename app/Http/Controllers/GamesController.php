@@ -131,7 +131,7 @@ class GamesController extends Controller
             'Client-ID' => env('IGDB_CLIENT_ID'),
             'Authorization' => env('IGDB_AUTHORIZATION')
         ])->withBody(
-            "fields *, cover.url, rating, aggregated_rating, genres.name, involved_companies.company.*, 
+            "fields *, cover.url, rating, aggregated_rating, genres.name, involved_companies.company.*, websites.category, websites.url, 
             similar_games.*, similar_games.slug, similar_games.name, similar_games.cover.url, similar_games.platforms.abbreviation, summary, platforms.abbreviation, videos.*, screenshots.*; where slug=\"{$slug}\";",
             'text/plain'
         )->post('https://api.igdb.com/v4/games')
@@ -144,6 +144,7 @@ class GamesController extends Controller
 
         $game = $this->formatGame($unformattedGame[0]);
 
+        // dd($game);
         // dump($game);
         return view('show',[
             'game' => $game,
@@ -151,7 +152,41 @@ class GamesController extends Controller
     }
 
     public function formatGame($game) {
-        
+        $websiteCategory = [
+            '1'=> "website",
+            '4'=> 'facebook',
+            '5'=> 'twitter',
+            '6'=> 'twitch',
+            '8'=> 'instagram',
+            '18'=> 'discord',
+        ];
+
+        $websiteUrl = null;
+        $facebookUrl = null;
+        $twitterUrl = null;
+        $twitchUrl = null;
+        $instagramUrl = null;
+        $discordUrl = null;
+
+        if (isset($game['websites'])) {
+            foreach ($game['websites'] as $key => $value) {
+                if ($value['category'] == 1) {
+                    $websiteUrl = $value['url'];
+                } elseif ($value['category'] == 4) {
+                    $facebookUrl = $value['url'];
+                } elseif ($value['category'] == 5) {
+                    $twitterUrl = $value['url'];
+                } elseif ($value['category'] == 6) {
+                    $twitchUrl = $value['url'];
+                } elseif ($value['category'] == 8) {
+                    $instagramUrl = $value['url'];
+                } elseif ($value['category'] == 18) {
+                    $discordUrl = $value['url'];
+                }
+            }
+        }
+
+
 
         return collect($game)->merge([
             'coverUrlBig' => str_replace('thumb', 'cover_big',$game['cover']['url']),
@@ -169,7 +204,15 @@ class GamesController extends Controller
                     'big'=>str_replace('thumb', 'screenshot_big',$newItem),
                 ])->toArray();
             }):[],
+            'websiteUrl' =>  $websiteUrl,
+            'facebookUrl' =>  $facebookUrl,
+            'twitterUrl' =>  $twitterUrl,
+            'twitchUrl' =>  $twitchUrl,
+            'instagramUrl' =>  $instagramUrl,
+            'discordUrl' =>  $discordUrl,
+
             'formatted_similar_games' => isset($game['similar_games']) ? collect($game['similar_games'])->map(function($item){
+
                 return collect($item)->merge([
                     'routeToSlug' => route('games.show', $item['slug']),
                     'coverBig' => isset($item['cover'])? str_replace('thumb', 'cover_big',$item['cover']['url']):"",
