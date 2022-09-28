@@ -25,7 +25,7 @@ class ComingSoon extends Component
             'Client-ID' => env('IGDB_CLIENT_ID'),
             'Authorization' => env('IGDB_AUTHORIZATION')
         ])->withBody(
-            "fields *, cover.url, first_release_date, cover, name, rating;
+            "fields cover.url, first_release_date, cover, name, rating, slug;
              where cover != null & (first_release_date >= {$current} & first_release_date <= {$after});
              sort first_release_date asc;
             limit 4;",
@@ -50,7 +50,7 @@ class ComingSoon extends Component
 
         return $comingSoonWithNewKeys->map(function($game){
             return collect($game)->merge([
-                'routeToSlug' => isset($game['slug']) ? route('games.show', $game['slug']): "#",
+                'routeToSlug' => isset($game['slug']) ? route('games.show', $game['slug']): "",
                 'coverUrl' => isset($game['cover']) ? str_replace('thumb', 'cover_small',$game['cover']['url']): "",
                 'first_release_date_formatted' => isset($game['first_release_date']) ? date("F j, Y",$game['first_release_date']) : "",
             ]);
