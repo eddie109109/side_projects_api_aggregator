@@ -24,7 +24,7 @@ class RecentlyReviewed extends Component
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => env('IGDB_AUTHORIZATION')
             ])->withBody(
-                "fields cover.url, first_release_date, platforms.abbreviation, aggregated_rating, rating_count, summary;
+                "fields cover.url, first_release_date, platforms.abbreviation, aggregated_rating, rating_count, summary, slug, name;
                 where cover != null & platforms = (48, 49, 130, 6) & aggregated_rating != null & platforms.abbreviation != null
                 & (first_release_date >= {$before} & first_release_date <= {$current})
                 & rating_count > 5;
