@@ -1,20 +1,6 @@
 <div wire:init="loadMostAnticipated" class="most-anticipated-container space-y-10 mt-8">
     @forelse ($mostAnticipated as $game)
-    <div class="game flex">
-        <a href={{$game['routeToSlug']}}>
-            <img src={{$game['coverUrl']}}  alt="most_anticipated_img" class="w-16 hover:opacity-75 transition ease-in-out duration-150">
-        </a>
-        <div class="ml-4">
-            <a href={{$game['routeToSlug']}} class="hover:text-gray-300">
-                @if (isset($game['name']))
-                {{$game['name']}}
-                @else
-                    Game Name N/A
-                @endif
-            </a>
-            <div class="text-gray-400 text-sm mt-1">{{$game['first_release_date_formatted']}}</div>
-        </div>
-    </div>
+        <x-game-card-small :game="$game" />
     @empty
     {{-- <div class="items-center justify-center flex">
         <svg aria-hidden="true" class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -23,16 +9,6 @@
         </svg>
     </div> --}} 
     {{-- the above is spinner --}}
-    @for ($i = 0; $i < 4; $i++)
-        <div class="game flex">
-            <a href="#">
-                <div class="w-16 h-20 bg-gray-800 rounded"></div>
-            </a>
-            <div class="ml-4  mt-1">
-                <div class="w-20 h-3 bg-gray-200 rounded"></div>
-                <div class="w-16 h-3 bg-gray-500 rounded mt-4"></div>
-            </div>
-        </div>
-    @endfor
+    <x-game-card-small-skeleton />
     @endforelse
 </div>
