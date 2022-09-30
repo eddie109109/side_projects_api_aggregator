@@ -197,7 +197,7 @@
                                         'slug' => $loop->index,
                                         'rating' => $item['formatted_aggregated_rating'],
                                         'event' => null,
-                                    ]);
+                                    ])
                                 @endpush
                             </div>
                         </div>
