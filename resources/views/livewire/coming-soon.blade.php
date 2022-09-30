@@ -1,4 +1,4 @@
-<div wire:init="loadComingSoon" class="most-anticipated-container space-y-10 mt-8">
+<div id="coming_soon" wire:init="loadComingSoon" class="most-anticipated-container space-y-10 mt-8">
     @forelse ($comingSoon as $game)
     <div class="game flex">
         <a href={{$game['routeToSlug']}}>

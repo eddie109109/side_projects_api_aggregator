@@ -44,19 +44,33 @@
             </div>
             <div class="flex flex-wrap items-center mt-8 space-x-12">
                 <div class= "flex items-center">
-                    <div class="w-16 h-16 bg-gray-800 rounded-full">
-                        <div class="font-semibold text-xs flex justify-center items-center h-full">
+                    <div id="memberRating" class="w-16 h-16 bg-gray-800 rounded-full relative">
+                        {{-- <div class="font-semibold text-xs flex justify-center items-center h-full">
                             {{$game['formatted_rating']}}
-                        </div>
+                        </div> --}}
+                        @push('scripts')
+                            @include('_rating', [
+                                'slug' => 'memberRating',
+                                'rating' => $game['formatted_rating'],
+                                'event' => null,
+                            ])
+                        @endpush
                         
                     </div>
                     <div class="ml-4 text-xs">Member <br> Score</div>
                 </div>
                 <div class= "flex items-center">
-                    <div class="w-16 h-16 bg-gray-800 rounded-full">
-                        <div class="font-semibold text-xs flex justify-center items-center h-full">
+                    <div id="aggregatedRating" class="w-16 h-16 bg-gray-800 rounded-full relative">
+                        {{-- <div class="font-semibold text-xs flex justify-center items-center h-full">
                             {{$game['formatted_aggregated_rating']}}
-                        </div>
+                        </div> --}}
+                        @push('scripts')
+                            @include('_rating', [
+                                'slug' => 'aggregatedRating',
+                                'rating' => $game['formatted_aggregated_rating'],
+                                'event' => null,
+                            ])
+                        @endpush
                         
                     </div>
                     <div class="ml-4 text-xs">Critic <br> Score</div>
@@ -167,7 +181,7 @@
                         </a>
                         <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full" style="right:-20px; bottom: -20px">
                             <!-- the circle rating goes in here  -->
-                            <div class="font-semibold flex text-xs justify-center items-center h-full">
+                            <div id={{$loop->index}} class="font-semibold flex text-xs justify-center items-center h-full">
                                 {{-- @if (isset($item['aggregated_rating']))
                                     {{round($item['aggregated_rating'])}}%
                                 @else
@@ -177,7 +191,14 @@
                                     0%
                                     @endif       
                                 @endif --}}
-                                {{$item['formatted_aggregated_rating']}}
+                                {{-- {{$item['formatted_aggregated_rating']}} --}}
+                                @push('scripts')
+                                    @include('_rating', [
+                                        'slug' => $loop->index,
+                                        'rating' => $item['formatted_aggregated_rating'],
+                                        'event' => null,
+                                    ]);
+                                @endpush
                             </div>
                         </div>
                     </div>

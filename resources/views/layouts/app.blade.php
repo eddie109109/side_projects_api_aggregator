@@ -16,9 +16,9 @@
                     <img src="/gamelogo.png" alt="gamelogo" class="w-32 flex-none">
                 </a>
                 <ul class="flex ml-0 lg:ml-16 space-x-8 mt-6 lg:mt-0">
-                    <li><a href="#" class="hover:text-gray-400">Games</a></li>
-                    <li><a href="#" class="hover:text-gray-400">Reviews</a></li>
-                    <li><a href="#" class="hover:text-gray-400">Coming Soon</a></li>
+                    <li><a href="#popular_games" class="hover:text-gray-400">Games</a></li>
+                    <li><a href="#recently_reviewed" class="hover:text-gray-400">Reviews</a></li>
+                    <li><a href="#coming_soon" class="hover:text-gray-400">Coming Soon</a></li>
                 </ul>
             </div>
             <div class="flex items-center mt-6 lg:mt-0">
@@ -45,5 +45,7 @@
         </div>
     </footer>
     @livewireScripts
+    <script src="/js/app.js"></script>
+    @stack('scripts')
 </body>
 </html>
