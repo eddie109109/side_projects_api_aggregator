@@ -1,41 +1,6 @@
 <div id="recently_reviewed" wire:init="loadRecentlyReviewed" class="recently-reviewed-container space-y-12 mt-8">
     @forelse ($recentlyReviewed as $game)
-        <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
-            <div class="relative flex-none">
-                <a href={{$game['routeToSlug']}}>
-                    <img src={{$game['coverUrl']}} alt="battlefield" class="w-48 hover:opacity-75 transition ease-in-out duration-150">
-                </a>
-                <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full" style="right:-20px; bottom: -20px">
-                    <div class="font-semibold flex text-xs justify-center items-center h-full">{{$game['floorAggregatedRating']}}</div>
-                </div>
-            </div>
-            <div class="ml-12">
-                <a href={{$game['routeToSlug']}} class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">
-                    @if (isset($game['name']))
-                    {{$game['name']}}
-                    @else
-                        N/A
-                    @endif
-                    
-                </a>
-                <div class="text-gray-400 mt-1">
-                    {{-- @foreach ($game['platforms'] as $platform)
-                        @if (array_key_exists('abbreviation', $platform))
-                            {{$platform['abbreviation']}},
-                        @endif
-                    @endforeach --}}
-                    {{$game['platforms']}}
-                </div>
-                <p class="mt-6 text-gray-400 hidden lg:block">
-                    @if (isset($game['summary']))
-                        {{$game['summary']}}
-                    @else
-                        N/A
-                    @endif
-                   
-                </p>
-            </div>
-        </div>
+      <x-game-card-recently-reviewed :game="$game" />
     @empty
     {{-- <div class="items-center justify-center flex">
         <svg aria-hidden="true" class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
