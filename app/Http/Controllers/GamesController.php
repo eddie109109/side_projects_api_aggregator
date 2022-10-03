@@ -189,7 +189,7 @@ class GamesController extends Controller
 
 
         return collect($game)->merge([
-            'coverUrlBig' => str_replace('thumb', 'cover_big',$game['cover']['url']),
+            'coverUrlBig' => isset($game['cover']) ? str_replace('thumb', 'cover_big',$game['cover']['url']): "",
             'formatted_first_release_date' => isset($game['first_release_date'])? date("F j, Y",$game['first_release_date']): "",
             'formatted_rating' => isset($game['rating']) ?  floor($game['rating']) : 0,
             'formatted_aggregated_rating' => isset($game['aggregated_rating']) ?  floor($game['aggregated_rating']) : 0,

@@ -5,7 +5,12 @@
     <div class="game-details border-b border-gray-800 pb-12 flex flex-col lg:flex-row">
         <div class="flex-none">
             <a href="#">
-                <img src={{$game['coverUrlBig']}} alt={{$game['name']}}>
+                @if ($game['coverUrlBig'] != "")
+                    <img src={{$game['coverUrlBig']}} alt={{$game['name']}}>
+                @else
+                <div class="w-52 h-60 bg-gray-800 hover:opacity-75 transition ease-in-out duration-150 text-center">cover N/A</div>
+                @endif
+                
             </a>
         </div>
         <div class="lg:ml-12">
@@ -175,9 +180,12 @@
                 <div class="game mt-8">
                     <div class="relative inline-block">
                         <a href={{$item['routeToSlug']}}>
-                            {{-- @if (isset($item['cover'])) --}}
+                            @if ($item['coverBig'] != "")
                                 <img src={{$item['coverBig']}} alt="gamecovers" class="hover:opacity-75 transition ease-in-out duration-150">
-                            {{-- @endif  --}}
+                            @else 
+                            {{-- <img class="wi" src='../battlefield.jpg' alt="gamecovers" class="hover:opacity-75 transition ease-in-out duration-150"> --}}
+                                <div class="w-52 h-60 bg-gray-800 hover:opacity-75 transition ease-in-out duration-150">cover N/A</div>
+                            @endif 
                         </a>
                         <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full" style="right:-20px; bottom: -20px">
                             <!-- the circle rating goes in here  -->
@@ -202,7 +210,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="block text-base font-semibold leading-tight hover:text-gray-400 mt-8">{{$item['name']}}</a>
+                    <a href={{$item['routeToSlug']}} class="block text-base font-semibold leading-tight hover:text-gray-400 mt-8">{{$item['name']}}</a>
                     
                     {{-- @if (isset($item['platforms']))
                         @foreach ($item['platforms'] as $platform)
