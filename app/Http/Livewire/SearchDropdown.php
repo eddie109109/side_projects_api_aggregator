@@ -19,7 +19,7 @@ class SearchDropdown extends Component
 
     public function render()
     {
-        if (strlen($this->search) > 1) {
+        if (strlen($this->search) > 0) {
             $this->searchResult =  Http::withHeaders([
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => env('IGDB_AUTHORIZATION')
@@ -31,6 +31,8 @@ class SearchDropdown extends Component
                'text/plain'
             )->post('https://api.igdb.com/v4/games')
             ->json();
+        } else {
+            $this->searchResult = [];
         }
         
     
