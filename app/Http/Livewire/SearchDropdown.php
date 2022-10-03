@@ -11,14 +11,13 @@ class SearchDropdown extends Component
     public $search = "";
     public $searchResult = [];
 
-    public function loadDropdown() {
-        // while (Str::length($this->search) > 0) {
-          
-        // dump($this->searchResult);
-    }
 
     public function render()
     {
+        if (strlen($this->search) > 20) {
+            $this->search = substr($this->search,0, 20);
+        }
+        $this->search = filter_var($this->search, FILTER_SANITIZE_SPECIAL_CHARS);
         if (strlen($this->search) > 0) {
             $this->searchResult =  Http::withHeaders([
                 'Client-ID' => env('IGDB_CLIENT_ID'),
