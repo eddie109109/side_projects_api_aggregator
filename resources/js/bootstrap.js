@@ -12,7 +12,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 window.ProgressBar = require('progressbar.js');
 
-window.Spinner = require('spin.js');
 
 
 /**
