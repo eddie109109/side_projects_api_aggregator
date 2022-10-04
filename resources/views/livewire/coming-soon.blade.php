@@ -2,7 +2,7 @@
     @forelse ($comingSoon as $game)
     <div class="game flex">
         <a href={{$game['routeToSlug']}}>
-            <img src={{$game['coverUrl']}} alt="coming_soon_img" class="w-16 hover:opacity-75 transition ease-in-out duration-150">
+            <img src={{$game['coverUrl']}} alt="coming_soon_img" class="w-16 hover:opacity-75 transition ease-in-out duration-150 hover:rotate-2">
         </a>
         <div class="ml-4">
             <a href={{$game['routeToSlug']}} class="hover:text-gray-300">

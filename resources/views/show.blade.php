@@ -181,10 +181,10 @@
                     <div class="relative inline-block">
                         <a href={{$item['routeToSlug']}}>
                             @if ($item['coverBig'] != "")
-                                <img src={{$item['coverBig']}} alt="gamecovers" class="hover:opacity-75 transition ease-in-out duration-150">
+                                <img src={{$item['coverBig']}} alt="gamecovers" class="hover:opacity-75 transition ease-in-out duration-150 hover:rotate-2">
                             @else 
                             {{-- <img class="wi" src='../battlefield.jpg' alt="gamecovers" class="hover:opacity-75 transition ease-in-out duration-150"> --}}
-                                <div class="w-52 h-60 bg-gray-800 hover:opacity-75 transition ease-in-out duration-150">cover N/A</div>
+                                <div class="w-52 h-60 bg-gray-800 hover:opacity-75 transition ease-in-out duration-150 hover:rotate-2">cover N/A</div>
                             @endif 
                         </a>
                         <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full" style="right:-20px; bottom: -20px">

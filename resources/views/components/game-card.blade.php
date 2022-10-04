@@ -1,7 +1,7 @@
 <div class="game mt-8">
     <div class="relative inline-block">
         <a href={{$game['routeToSlug']}}>
-            <img src={{$game['coverUrl']}} alt="battlefield" class="hover:opacity-75 transition ease-in-out duration-150">
+            <img src={{$game['coverUrl']}} alt="battlefield" class="hover:opacity-75 transition ease-in-out duration-150 hover:rotate-2">
         </a>
         <div id={{$game['routeToSlug']}} class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full" style="right:-20px; bottom: -20px">
             <!-- the circle rating goes in here  -->

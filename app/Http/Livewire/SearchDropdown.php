@@ -23,9 +23,10 @@ class SearchDropdown extends Component
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => env('IGDB_AUTHORIZATION')
             ])->withBody(
-                "search \"{$this->search}\";
-                fields name, cover.url, slug;
-                where cover != null;
+                "fields name, cover.url, slug, first_release_date, rating;
+                search \"{$this->search}\";
+                
+                where cover != null & slug != null;
                limit 10;",
                'text/plain'
             )->post('https://api.igdb.com/v4/games')

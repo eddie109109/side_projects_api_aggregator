@@ -1,7 +1,7 @@
 <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
     <div class="relative flex-none">
         <a href={{$game['routeToSlug']}}>
-            <img src={{$game['coverUrl']}} alt="battlefield" class="w-48 hover:opacity-75 transition ease-in-out duration-150">
+            <img src={{$game['coverUrl']}} alt="battlefield" class="w-48 hover:opacity-75 transition ease-in-out duration-150 hover:rotate-2">
         </a>
         <div id={{$game['routeToSlug'].'recently-reviwed'}} class="absolute bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full" style="right:-20px; bottom: -20px">
             {{-- <div class="font-semibold flex text-xs justify-center items-center h-full">{{$game['floorAggregatedRating']}}</div> --}}

@@ -26,8 +26,8 @@
             @forelse ($searchResult as $item)
             <li class="border-b border-gray-700">
                 <a  href={{route('games.show', $item['slug'])}} class="flex hover:bg-gray-700 transition ease-in-out duration-150 items-center">
-                        <img class="w-12" src={{str_replace('thumb', 'cover_small',$item['cover']['url'])}} alt="">
-                        <span class="ml-4">{{$item['name']}}</span>
+                        <img class="w-12 m-1" src={{str_replace('thumb', 'cover_small',$item['cover']['url'])}} alt="">
+                        <span class="ml-4 mr-1">{{$item['name']}}</span>
                 </a>
             </li>
             @empty
