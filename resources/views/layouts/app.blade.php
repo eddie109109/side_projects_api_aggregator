@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Games</title>
     <link rel="stylesheet" href="/css/main.css">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @livewireStyles
 </head>
 <body class= "bg-gray-900 text-white">
