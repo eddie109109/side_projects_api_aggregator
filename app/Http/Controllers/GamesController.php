@@ -187,16 +187,15 @@ class GamesController extends Controller
         }
 
 
-
-        return collect($game)->merge([
+        $result = collect($game)->merge([
             'coverUrlBig' => isset($game['cover']) ? str_replace('thumb', 'cover_big',$game['cover']['url']): "",
             'formatted_first_release_date' => isset($game['first_release_date'])? date("F j, Y",$game['first_release_date']): "",
             'formatted_rating' => isset($game['rating']) ?  floor($game['rating']) : 0,
             'formatted_aggregated_rating' => isset($game['aggregated_rating']) ?  floor($game['aggregated_rating']) : 0,
             'formatted_summary' => isset($game['summary']) ? $game['summary']: "",
-            'formatted_genres' => isset($game['genres']) ? collect($game['genres'])->pluck('name')->implode(", ") : "No Genre Info",
-            'formatted_involved_companies' => isset($game['involved_companies']) ? collect($game['involved_companies'])->pluck('company')->pluck('name')->implode(", ") : "No Company Info",
-            'formatted_platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->implode(', ') : "No Platform Info",
+            'formatted_genres' => isset($game['genres']) ? collect($game['genres'])->pluck('name')->filter()->implode(", ") : "No Genre Info",
+            'formatted_involved_companies' => isset($game['involved_companies']) ? collect($game['involved_companies'])->pluck('company')->pluck('name')->filter()->implode(", ") : "No Company Info",
+            'formatted_platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->filter()->implode(', ') : "No Platform Info",
             'formatted_screenshots' => isset($game['screenshots']) ? collect($game['screenshots'])->map(function($item){
                 $newItem = $item['url'];
                 return collect($item)->merge([
@@ -221,6 +220,9 @@ class GamesController extends Controller
                 ])->toArray();
             }):[],
         ])->toArray();
+
+        // dump($result);
+        return $result;
 
     //     @if (isset($item['cover']))
     //     <img src={{str_replace('thumb', 'cover_big',$item['cover']['url'])}} alt="gamecovers" class="hover:opacity-75 transition ease-in-out duration-150">
