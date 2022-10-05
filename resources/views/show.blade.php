@@ -130,43 +130,129 @@
                 {{$game['formatted_summary']}}
             </p>
             
-            <div class="mt-12">
+            {{-- below is for the trailer section --}}
+            <div x-data="{ open: false }" class="mt-12">
                 @if (isset($game['videos'][0]))
-                <a class="inline-block" href="https://youtube.com/watch/{{$game['videos'][0]['video_id']}}">
-                    <button class="flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
+                {{-- <a class="inline-block" href="https://youtube.com/watch/{{$game['videos'][0]['video_id']}}"> --}}
+                    <button  x-on:click="open = true" id="open-btn" class="flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
                         <svg class="w-6 fill-current" xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="m10 16.5 6-4.5-6-4.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
                         <span class="ml-2">Play Trailer</span>
                         </button>
-                    </a>
+                    {{-- </a> --}}
                 @else
                     <a class="inline-block" href="https://youtube.com/watch/">
-                    <button class="flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
+                    <button  class="flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
                 
                         <svg class="w-6 fill-current" xmlns="http://www.w3.org/2000/svg" height="24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="m10 16.5 6-4.5-6-4.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
                         <span class="ml-2">Trailer N/A</span>
                         </button>
                     </a>
                 @endif
+                @if (isset($game['videos'][0]))
+                <template x-if="open"  >
+                    <div  x-show="open"  id="my-modal" style="background-color: rgba(0,0,0,0.5);"
+                        class="fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto z-[100]">
+                        <div  class="container mx-auto lg:px-32 rounded-lg overflow-y-auto">
+                            <div class="bg-gray-900 rounded">
+                                <div class="flex justify-end pr-4 pt-2">
+                                    <button  x-on:click="open = false" x-on:click="open=false" id="exit-btn" class="text-3xl leading-none hover:text-gray-300">
+                                        &times;
+                                    </button>
+                                </div>
+                                <div class="px-8 py-8" > 
+                                    <div class="responsive-container overflow-hidden relative" style="padding-top: 52.25%">
+                                        <iframe id="videosContainers" class="responsive-iframe absolute top-0 left-0 w-full h-full" width="560" height="315" src="https://youtube.com/embed/{{$game['videos'][0]['video_id']}}">
+                                        </iframe>           
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </template>
+                @endif
                 
                 
+                {{-- @push('scripts')
+                    <script>
+                        let modal = document.getElementById("my-modal");
+
+                        let btn = document.getElementById("open-btn");
+
+                        let button = document.getElementById("exit-btn");
+
+                        // We want the modal to open when the Open button is clicked
+                        btn.onclick = function() {
+                        modal.style.display = "block";
+                        }
+                        // // We want the modal to close when the OK button is clicked
+                        button.onclick = function() {
+                        modal.style.display = "none";
+                        stopVideo('videosContainers');
+                        }
+
+                        //reference below:
+                        // https://stackoverflow.com/questions/40211944/stop-playing-video-in-iframe-when-modal-is-closed
+                        function stopVideo(id) {
+                            const videosContainers = document.getElementById('videosContainers');
+                            var src = videosContainers.getAttribute('src');
+                            videosContainers.src = "";
+                            videosContainers.src = src;
+                            // take out the source and put the source back 
+                        }
+
+                        //// The modal will close when the user clicks anywhere outside the modal
+                        window.onclick = function(event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                            stopVideo('videosContainers');
+                        }
+                        }
+                    </script>
+                @endpush --}}
             </div>
+            {{-- end of trailer section --}}
+            
         </div>
     </div> 
     <!-- end game details -->
-    <div class="images-container border-b border-gray-800 pb-12 mt-8">
+    <div   x-data="{ screenshot_open: false , image: ''}"   class="images-container border-b border-gray-800 pb-12 mt-8">
         <h2 class="uppercase text-blue-500 font-semibold tracking-wide">Images</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8">
             {{-- @if (isset($game['screenshots'] )) --}}
                 @foreach ($game['formatted_screenshots'] as $item)
                     <div class="w-full h-full">
-                        <a href={{$item['huge']}}>
-                            <img class="hover:opacity-75 transition ease-in-out duration-150" src={{$item['big']}} alt="screenshots">
+                        <a href="#" x-on:click.prevent="screenshot_open = true, image='{{$item['huge']}}'">
+                        <img   class="hover:opacity-75 transition ease-in-out duration-150" src={{$item['big']}} alt="screenshots">
                         </a>
+                        
                     </div>
+                   
                 @endforeach
+                {{-- <button x-on:click="screenshot_open = true">open</button> --}}
+                
             {{-- @else
                 <div>Screenshots N/A :(</div>
             @endif --}}
+            <template x-if="screenshot_open">
+                <div x-show="screenshot_open" style="background-color: rgba(0,0,0,.2);"
+                    class="fixed top-0 left-0 w-full h-full flex items-center shadow-lg overflow-y-auto z-[100]">
+                    <div class="container mx-auto lg:px-72 rounded-lg overflow-y-auto">
+                        <div class="bg-gray-900 rounded">
+                            <div class="flex justify-end pr-4 pt-2">
+                                <button  x-on:click="screenshot_open = false" id="exit-btn" class="text-3xl leading-none hover:text-gray-300">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="px-8 py-8" > 
+                                <div class="responsive-container overflow-hidden relative">
+                                    <img :src="image" alt="screenshot">         
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
     <!-- end images container -->
